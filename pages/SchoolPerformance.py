@@ -2,7 +2,6 @@ import streamlit as st
 import joblib
 import numpy as np
 import os
-import logging
 from pathlib import Path
 import base64
 
@@ -22,7 +21,7 @@ def img_to_bytes(img_path):
         encoded = base64.b64encode(img_bytes).decode()
         return encoded
     except Exception as ex:
-        logging.error(f'Error in img_to_bytes: {ex}')
+        print(f'Error in img_to_bytes: {ex}')
         return None
 
 def img_to_html(img_path):
@@ -30,7 +29,7 @@ def img_to_html(img_path):
         img_html = f"<img src='data:image/svg+xml;base64,{img_to_bytes(img_path)}' class='img-fluid' id='fixed-image'>"
         return img_html
     except Exception as ex:
-        logging.error(f'Error in img_to_html: {ex}')
+        print(f'Error in img_to_html: {ex}')
         return None
 
 def set_page_configs():
@@ -45,7 +44,7 @@ def main():
         st.markdown(img_to_html(CMS_LOGO_PATH), unsafe_allow_html=True)
 
     except Exception as ex:
-        logging.error(f'Error in display_image_and_intro: {ex}')
+        print(f'Error in display_image_and_intro: {ex}')
         return None
     st.markdown('<h2 style="text-align:center; margin-top:5%; margin-bottom:-5%;">School Performance Predictor</h2>', unsafe_allow_html=True)
     st.divider()
