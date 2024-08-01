@@ -1,41 +1,13 @@
 import streamlit as st
-import joblib
 import numpy as np
 import os
-from pathlib import Path
-import base64
+import sys
+sys.path.append(os.path.dirname(os.getcwd()))
+from utils.image_utils import img_to_html
+from utils.app_utils import set_page_configs
+from config import CMS_LOGO_PATH, LOGO_STYLE_PATH, SCHOOL_MODEL_ENGLISH, SCHOOL_MODEL_MATH, SCHOOL_MODEL_SCIENCE
 
-current_path = os.path.abspath(__file__)
-root_path = os.path.dirname(os.path.dirname(current_path))
-
-CMS_LOGO_PATH = os.path.join(os.getcwd(), 'static', 'images', 'cms_logo.svg')
-LOGO_STYLE_PATH = os.path.join(os.getcwd(), 'static', 'html', 'logo_style.html')
-
-model_eng = joblib.load(os.path.join(root_path, 'school_models', 'school_model_eng_ka.pkl'))
-model_math = joblib.load(os.path.join(root_path, 'school_models', 'school_model_eng_ka.pkl'))
-model_sci = joblib.load(os.path.join(root_path, 'school_models', 'school_model_eng_ka.pkl'))
-
-def img_to_bytes(img_path):
-    try:
-        img_bytes = Path(img_path).read_bytes()
-        encoded = base64.b64encode(img_bytes).decode()
-        return encoded
-    except Exception as ex:
-        print(f'Error in img_to_bytes: {ex}')
-        return None
-
-def img_to_html(img_path):
-    try:
-        img_html = f"<img src='data:image/svg+xml;base64,{img_to_bytes(img_path)}' class='img-fluid' id='fixed-image'>"
-        return img_html
-    except Exception as ex:
-        print(f'Error in img_to_html: {ex}')
-        return None
-
-def set_page_configs():
-    st.set_page_config(page_title='PFA Predictors', page_icon=CMS_LOGO_PATH, layout="wide")
-
-def main():
+def school_performance():
     set_page_configs()
     try:
         with open(LOGO_STYLE_PATH) as f:
@@ -79,11 +51,11 @@ def main():
                           final_teacher_quality, final_numbers_infra]])
 
     if subject == 'Math':
-        model = model_math
+        model = SCHOOL_MODEL_MATH
     elif subject == 'Science':
-        model = model_sci
+        model = SCHOOL_MODEL_SCIENCE
     else:
-        model = model_eng
+        model = SCHOOL_MODEL_ENGLISH
 
     if st.button('Predict'):
         prediction = model.predict(features)[0]
@@ -91,18 +63,16 @@ def main():
         
         highest_proba_class = prediction_proba.argmax()
         highest_proba_score = prediction_proba[highest_proba_class]
+        probability = np.round(highest_proba_score * 100, 2)
         
         class_labels = {
-            0: 'Considerable improvement',
-            1: 'High Improvement',
-            2: 'Little Improvement',
-            3: 'No Improvement'
+            0: ['Considerable improvement', 'green'],
+            1: ['High Improvement', 'green'],
+            2: ['Little Improvement', 'orange'],
+            3: ['No Improvement', 'red']
         }
-        predicted_label = class_labels.get(highest_proba_class, 'Unknown')
+        predicted_label = class_labels.get(highest_proba_class)[0]
+        prediction_color = class_labels.get(highest_proba_class)[1]
 
-        st.write(f'Final Prediction: {predicted_label}')
-        st.write(f'Probability of the predicted class: {highest_proba_score:.4f}')
-
-if __name__ == '__main__':
-    main()
-
+        st.write(f'Final Prediction: :{prediction_color}[{predicted_label}] ')
+        st.write(f'Probability of the predicted class: :{prediction_color}[{probability}%]')

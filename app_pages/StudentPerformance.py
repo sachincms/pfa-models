@@ -1,38 +1,13 @@
 import streamlit as st
-import joblib
 import numpy as np
-from pathlib import Path
-import base64
 import os
+import sys
+sys.path.append(os.path.dirname(os.getcwd()))
+from utils.image_utils import img_to_html
+from utils.app_utils import set_page_configs
+from config import CMS_LOGO_PATH, LOGO_STYLE_PATH, STUDENT_MODEL_ENGLISH, STUDENT_MODEL_MATH, STUDENT_MODEL_SCIENCE
 
-STUDENT_MODEL_ENG = joblib.load(os.path.join('student_models', 'logistic_regression_model_eng.pkl'))
-STUDENT_MODEL_MATH = joblib.load(os.path.join('student_models', 'logistic_regression_model_math.pkl'))
-STUDENT_MODEL_SCIENCE = joblib.load(os.path.join('student_models', 'logistic_regression_model_sci.pkl'))
-
-CMS_LOGO_PATH = os.path.join(os.getcwd(), 'static', 'images', 'cms_logo.svg')
-LOGO_STYLE_PATH = os.path.join(os.getcwd(), 'static', 'html', 'logo_style.html')
-
-def img_to_bytes(img_path):
-    try:
-        img_bytes = Path(img_path).read_bytes()
-        encoded = base64.b64encode(img_bytes).decode()
-        return encoded
-    except Exception as ex:
-        print(f'Error in img_to_bytes: {ex}')
-        return None
-
-def img_to_html(img_path):
-    try:
-        img_html = f"<img src='data:image/svg+xml;base64,{img_to_bytes(img_path)}' class='img-fluid' id='fixed-image'>"
-        return img_html
-    except Exception as ex:
-        print(f'Error in img_to_html: {ex}')
-        return None
-
-def set_page_configs():
-    st.set_page_config(page_title='PFA Predictors', page_icon=CMS_LOGO_PATH, layout="wide")
-
-def main():
+def student_performance():
     set_page_configs()
     
     try:
@@ -43,51 +18,10 @@ def main():
 
     except Exception as ex:
         print(f'Error in display_image_and_intro: {ex}')
-        return None
+        st.markdown('<h2 style="text-align:center; margin-top:5%; margin-bottom:-5%;">Catalyst Management Services</h2>', unsafe_allow_html=True)
 
     st.markdown('<h2 style="text-align:center; margin-top:5%; margin-bottom:-5%;">Student Performance Predictor</h2>', unsafe_allow_html=True)
     st.divider()
-
-    # st.markdown('''
-    #         <style>
-
-    #             /* Value above slider */
-    #             div[data-testid="stThumbValue"]{
-    #                 color:#64e3b2;
-    #             }
-
-    #             /* Slider head */
-    #             div.stSlider > div[data-baseweb="slider"] > div > div > div[role="slider"]{
-    #                 background-color: #64e3b2;
-    #                 box-shadow: #64e3b2 
-    #             }
-
-    #             /* Slider track */
-    #             div.stSlider > div[data-baseweb = "slider"] > div > div[class="class="st-ds st-c5 st-c7 st-c6 st-as st-ct st-dt"] {
-    #                 background: linear-gradient(
-    #                             to right, 
-    #                             rgb(100, 227, 178) 0%, 
-    #                             rgb(100, 227, 178) 25%, 
-    #                             rgba(100, 227, 178, 0.25) 50%,
-    #                             rgba(100, 227, 178, 0.25) 75%,
-    #                             rgba(100, 227, 178, 0.25) 100%
-    #                 );
-    #             }
-
-    #             /* Slider Min Max Values */
-
-    #             div.stSlider > div[data-baseweb = "slider"] > div[data-testid="stTickBar"] > div {
-    #                 background: rgb(100, 227, 178); 
-    #             }
-
-    #             /* Radio button */
-    #             div.stRadio > label[data-baseweb="radio"] > div[class="st-dg st-d6 st-d7 st-d8 st-d9 st-dh st-b4 st-b5 st-di"]{
-    #                 background-color: #64e3b2;
-    #                 background: #64e3b2;
-    #             }
-
-    #         </style>
-    #     ''', unsafe_allow_html=True)
 
     col1, col2, _ = st.columns(3)
     
@@ -110,9 +44,9 @@ def main():
         model = STUDENT_MODEL_MATH
 
         with col6:
-            arithmetic_and_number_operations = st.slider('Arithmetic and Number Operations', 0.0, 1.0, step=0.05)
-            geometrical_ideas = st.slider('Geometrical Ideas', 0.0, 1.0, step=0.05)
-            data_handling_and_statistics = st.slider('Data Handling and Statistics', 0.0, 1.0, step=0.05)
+            arithmetic_and_number_operations = st.slider('Arithmetic and Number Operations', 0.0, 1.0, 0.05)
+            geometrical_ideas = st.slider('Geometrical Ideas', 0.0, 1.0, 0.05)
+            data_handling_and_statistics = st.slider('Data Handling and Statistics', 0.0, 1.0, 0.05)
         
         with col7:
             algebra_and_mathematical_reasoning = st.slider('Algebra and Mathematical Reasoning', 0.0, 1.0, step=0.05)
@@ -141,7 +75,7 @@ def main():
                               measurement_and_conversion, application_of_concepts, bl_level, gender]])
         
     else:
-        model = STUDENT_MODEL_ENG
+        model = STUDENT_MODEL_ENGLISH
 
         with col6:
             language_structure_and_grammar = st.slider('Language Structure and Grammar', 0.0, 1.0, step=0.05)
@@ -165,6 +99,3 @@ def main():
         
         st.write(f'Final Prediction: :{prediction_color}[{prediction_message}]')
         st.write(f'Probability of student passing: :{prediction_color}[{probability}%]')
-
-# if __name__ == '__main__':
-#     main()
