@@ -5,19 +5,20 @@ import sys
 sys.path.append(os.path.dirname(os.getcwd()))
 from utils.image_utils import img_to_html
 from utils.app_utils import set_page_configs
-from config import CMS_LOGO_PATH, LOGO_STYLE_PATH, SCHOOL_MODEL_ENGLISH, SCHOOL_MODEL_MATH, SCHOOL_MODEL_SCIENCE
+from config import PFA_LOGO_PATH, CMS_LOGO_PATH, LOGO_STYLE_PATH, PFA_LOGO_STYLE_PATH, SCHOOL_MODEL_ENGLISH, SCHOOL_MODEL_MATH, SCHOOL_MODEL_SCIENCE
 
 def school_performance():
     set_page_configs()
     try:
-        with open(LOGO_STYLE_PATH) as f:
+        with open(PFA_LOGO_STYLE_PATH) as f:
             st.markdown(f.read(), unsafe_allow_html=True)
 
-        st.markdown(img_to_html(CMS_LOGO_PATH), unsafe_allow_html=True)
+        st.markdown(img_to_html(PFA_LOGO_PATH, 'png', 'pfa_logo'), unsafe_allow_html=True)
 
     except Exception as ex:
-        print(f'Error in display_image_and_intro: {ex}')
-        return None
+        print(f'Error displaying logo: {ex}')
+        st.markdown('<h2 style="text-align:center; margin-top:5%; margin-bottom:-5%;">Transform Schools</h2>', unsafe_allow_html=True)
+
     st.markdown('<h2 style="text-align:center; margin-top:5%; margin-bottom:-5%;">School Performance Predictor</h2>', unsafe_allow_html=True)
     st.divider()
     
@@ -76,3 +77,14 @@ def school_performance():
 
         st.write(f'Final Prediction: :{prediction_color}[{predicted_label}] ')
         st.write(f'Probability of the predicted class: :{prediction_color}[{probability}%]')
+    
+    st.markdown('<h6 style="text-align:center;">Powered by</h6>', unsafe_allow_html=True)
+    try:
+        with open(LOGO_STYLE_PATH) as f:
+            st.markdown(f.read(), unsafe_allow_html=True)
+
+        st.markdown(img_to_html(CMS_LOGO_PATH, 'svg', 'cms_logo'), unsafe_allow_html=True)
+
+    except Exception as ex:
+        print(f'Error displaying logo: {ex}')
+        st.markdown('<h2 style="text-align:center; margin-top:5%; margin-bottom:-5%;">Catalyst Management Services</h2>', unsafe_allow_html=True)

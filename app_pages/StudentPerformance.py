@@ -5,20 +5,20 @@ import sys
 sys.path.append(os.path.dirname(os.getcwd()))
 from utils.image_utils import img_to_html
 from utils.app_utils import set_page_configs
-from config import CMS_LOGO_PATH, LOGO_STYLE_PATH, STUDENT_MODEL_ENGLISH, STUDENT_MODEL_MATH, STUDENT_MODEL_SCIENCE
+from config import CMS_LOGO_PATH, PFA_LOGO_PATH, PFA_LOGO_STYLE_PATH, LOGO_STYLE_PATH, STUDENT_MODEL_ENGLISH, STUDENT_MODEL_MATH, STUDENT_MODEL_SCIENCE
 
 def student_performance():
     set_page_configs()
     
     try:
-        with open(LOGO_STYLE_PATH) as f:
+        with open(PFA_LOGO_STYLE_PATH) as f:
             st.markdown(f.read(), unsafe_allow_html=True)
 
-        st.markdown(img_to_html(CMS_LOGO_PATH), unsafe_allow_html=True)
+        st.markdown(img_to_html(PFA_LOGO_PATH, 'png', 'pfa_logo'), unsafe_allow_html=True)
 
     except Exception as ex:
-        print(f'Error in display_image_and_intro: {ex}')
-        st.markdown('<h2 style="text-align:center; margin-top:5%; margin-bottom:-5%;">Catalyst Management Services</h2>', unsafe_allow_html=True)
+        print(f'Error displaying logo: {ex}')
+        st.markdown('<h2 style="text-align:center; margin-top:5%; margin-bottom:-5%;">Transform Schools</h2>', unsafe_allow_html=True)
 
     st.markdown('<h2 style="text-align:center; margin-top:5%; margin-bottom:-5%;">Student Performance Predictor</h2>', unsafe_allow_html=True)
     st.divider()
@@ -99,3 +99,14 @@ def student_performance():
         
         st.write(f'Final Prediction: :{prediction_color}[{prediction_message}]')
         st.write(f'Probability of student passing: :{prediction_color}[{probability}%]')
+    
+    st.markdown('<h6 style="text-align:center;">Powered by</h6>', unsafe_allow_html=True)
+    try:
+        with open(LOGO_STYLE_PATH) as f:
+            st.markdown(f.read(), unsafe_allow_html=True)
+
+        st.markdown(img_to_html(CMS_LOGO_PATH, 'svg', 'cms_logo'), unsafe_allow_html=True)
+
+    except Exception as ex:
+        print(f'Error displaying logo: {ex}')
+        st.markdown('<h2 style="text-align:center; margin-top:5%; margin-bottom:-5%;">Catalyst Management Services</h2>', unsafe_allow_html=True)

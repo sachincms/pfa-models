@@ -10,4 +10,7 @@ SCHOOL_MODEL_MATH = joblib.load(os.path.join(current_file_path, 'school_models',
 SCHOOL_MODEL_SCIENCE = joblib.load(os.path.join(current_file_path, 'school_models', 'school_model_eng_ka.pkl'))
 
 CMS_LOGO_PATH = os.path.join(current_file_path, 'static', 'images', 'cms_logo.svg')
+PFA_LOGO_PATH = os.path.join(current_file_path, 'static', 'images', 'transform.png')
 LOGO_STYLE_PATH = os.path.join(current_file_path, 'static', 'html', 'logo_style.html')
+PFA_LOGO_STYLE_PATH = os.path.join(current_file_path, 'static', 'html', 'pfa_logo_style.html')
+DOCUMENTATION_PATH = os.path.join(current_file_path, 'static', 'html', 'documentation.html')

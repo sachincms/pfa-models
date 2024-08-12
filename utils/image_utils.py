@@ -11,9 +11,9 @@ def img_to_bytes(img_path):
         logging.error(f'Error in img_to_bytes: {ex}')
         return None
 
-def img_to_html(img_path):
+def img_to_html(img_path, img_format, css_id):
     try:
-        img_html = f"<img src='data:image/svg+xml;base64,{img_to_bytes(img_path)}' class='img-fluid' id='fixed-image'>"
+        img_html = f"<img src='data:image/{img_format}+xml;base64,{img_to_bytes(img_path)}' class='img-fluid' id='{css_id}'>"
         return img_html
     except Exception as ex:
         logging.error(f'Error in img_to_html: {ex}')
