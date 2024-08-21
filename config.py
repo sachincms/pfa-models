@@ -2,9 +2,12 @@ import joblib
 import os
 
 current_file_path = os.getcwd()
-STUDENT_MODEL_ENGLISH = joblib.load(os.path.join(current_file_path, 'student_models', 'logistic_regression_model_eng.pkl'))
-STUDENT_MODEL_MATH = joblib.load(os.path.join(current_file_path, 'student_models', 'logistic_regression_model_math.pkl'))
-STUDENT_MODEL_SCIENCE = joblib.load(os.path.join(current_file_path, 'student_models', 'logistic_regression_model_sci.pkl'))
+STUDENT_MODEL_ENGLISH_ODISHA = joblib.load(os.path.join(current_file_path, 'student_models', 'od_eng_logit.pkl'))
+STUDENT_MODEL_MATH_ODISHA = joblib.load(os.path.join(current_file_path, 'student_models', 'od_math_logit.pkl'))
+STUDENT_MODEL_SCIENCE_ODISHA = joblib.load(os.path.join(current_file_path, 'student_models', 'od_sci_logit.pkl'))
+STUDENT_MODEL_ENGLISH_KARNATAKA = joblib.load(os.path.join(current_file_path, 'student_models', 'ka_eng_logit.pkl'))
+STUDENT_MODEL_MATH_KARNATAKA = joblib.load(os.path.join(current_file_path, 'student_models', 'ka_math_logit.pkl'))
+STUDENT_MODEL_SCIENCE_KARNATAKA = joblib.load(os.path.join(current_file_path, 'student_models', 'ka_sci_logit.pkl'))
 SCHOOL_MODEL_ENGLISH = joblib.load(os.path.join(current_file_path, 'school_models', 'school_model_eng_ka.pkl'))
 SCHOOL_MODEL_MATH = joblib.load(os.path.join(current_file_path, 'school_models', 'school_model_eng_ka.pkl'))
 SCHOOL_MODEL_SCIENCE = joblib.load(os.path.join(current_file_path, 'school_models', 'school_model_eng_ka.pkl'))
